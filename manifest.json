@@ -1,0 +1,11 @@
+{
+    "name": "Copy & mail",
+    "description": "Mail the stuff in your clipboard",
+    "version": "1",
+    "manifest_version": 3,
+    "author": "Deveshwar K R",
+    "background": {
+        "service-worker" : "background.js"
+    },
+    "permissions": ["clipboardRead"]
+}
