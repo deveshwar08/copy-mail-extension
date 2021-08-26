@@ -1,0 +1,22 @@
+body {
+    background-color: rgb(56, 56, 56);
+    color: rgb(243, 243, 243);
+    margin: auto;
+}
+button {
+    background-color: #b3ff01;
+    border-radius: 25px;
+    margin: auto;
+    box-shadow: 1.5px 1.5px #616161;
+}
+#mail-clipboard {
+    margin-left: 25px;
+    margin-bottom: 25px;
+}
+form button{
+    margin-left: 35px;
+}
+h2{
+    text-align: center;
+    text-shadow: 2px 2px rgb(134, 134, 134);
+}

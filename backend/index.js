@@ -1,4 +1,6 @@
-const nodemailer = require('nodemailer');
+require('dotenv').config();
+const mailjet = require('node-mailjet')
+    .connect(process.env.domain, process.env.key);
 const express = require('express');
 const cors = require('cors');
 
@@ -7,34 +9,40 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
-
-let transport = nodemailer.createTransport({
-    host: 'smtp.mailtrap.io',
-    port: 2525,
-    auth: {
-        user: "29b03d4505d7c8",
-        pass: "a119685f4ca0c0"
-    }
-});
-
-app.post('/send-mail',(req, res) => {
+app.post('/send-mail', (req, res) => {
     const message = req.body.clipboardContent;
+    const receiverMail = req.body.email;
+    console.log("Mailing trying");
     try {
-        const message = req.body.clipboardContent;
-        console.log(req.body);
-        const mailContent = {
-            from: 'elonmusk@tesla.com', 
-            to: 'deveshwar00@gmail.com',         
-            subject: 'Clipboard data', 
-            html: `<h3>Your clipboard data</h3><br/><p>${message}</p><br/><h4>Enjoy your day</h4>`
-        };
-        transport.sendMail(mailContent, function(err, info) {
-            if (err) {
-              console.log(err)
-            } else {
-              console.log(info);
-            }
-        });
+        const request = mailjet
+            .post("send", { 'version': 'v3.1' })
+            .request({
+                "Messages": [
+                    {
+                        "From": {
+                            "Email": "deveshwar00@gmail.com",
+                            "Name": "Your PC"
+                        },
+                        "To": [
+                            {
+                                "Email": receiverMail,
+                                "Name": "Deveshwar"
+                            }
+                        ],
+                        "Subject": "Your clipboard",
+                        "TextPart": "Clipboard Data",
+                        "HTMLPart": "<h3>Your clipboard</h3><br />"+message,
+                        "CustomID": "AppGettingStartedTest"
+                    }
+                ]
+            })
+        request
+            .then((result) => {
+                console.log(result.body)
+            })
+            .catch((err) => {
+                console.log(err.statusCode)
+            })
         res.json("Email sent");
     } catch (err) {
         console.log(err);
